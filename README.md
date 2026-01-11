@@ -1,8 +1,46 @@
-# ucu-de-distributed-databases-hw1
+# Distributed databases: HW1
 
-cd client
-mvn clean package
-java -jar target/hw1-client-0.0.1-SNAPSHOT.jar inmemory 10 1000
+## 1. Попередні вимоги
+- Встановлено Java 25
 
+## 2. Підготовка
+### Запуск серверу
+```bash
 cd server
-mvn spring-boot:run
+./mvnw spring-boot:run
+```
+
+### Збираємо клієнт
+```bash
+cd client
+./mvnw clean package
+```
+
+### Запуск клієнту
+```bash
+$ java -jar target/hw1-client-0.0.1-SNAPSHOT.jar <counter-type> <parallel-clients> <requests-per-client>
+```
+`counter-type` - тип лічильника. Може приймати одне з двох значень: `in-memory`, або `file-based`  
+
+Приклад виклику:
+```bash
+$ java -jar target/hw1-client-0.0.1-SNAPSHOT.jar in-memory 2 10000
+```
+
+## 3. Виконання
+Запускаємо допоміжний скрипт з тест-кейсами
+```bash
+$ bash ./execute_tests.sh
+```
+
+## 4. Результати виконання
+| Тип лічильника        | Кількість клієнтів | Кількість запитів на клієнт   | Кінцеве значення  | Час виконання, сек    | Пропускна здатність, запитів/сек    |
+| ------------          | ---------          | -------------                 | -------------     | -------------         | -------------                       | 
+| in-memory             | 1                  | 10000                         | 10000             | 9.853                 | 1014.89                             |
+| in-memory             | 2                  | 10000                         | 20000             | 8.301                 | 2409.45                             |
+| in-memory             | 5                  | 10000                         | 50000             | 6.776                 | 7379.20                             |
+| in-memory             | 10                 | 10000                         | 100000            | 9.136                 | 10945.31                            |
+| file-based            | 1                  | 10000                         | 10000             | 10.399                | 961.62                              |
+| file-based            | 2                  | 10000                         | 20000             | 9.502                 | 2104.74                             |
+| file-based            | 5                  | 10000                         | 50000             | 16.765                | 2982.41                             |
+| file-based            | 10                 | 10000                         | 100000            | 32.673                | 3060.59                             |

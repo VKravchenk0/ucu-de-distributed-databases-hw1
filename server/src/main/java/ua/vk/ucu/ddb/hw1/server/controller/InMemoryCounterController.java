@@ -1,27 +1,31 @@
-package ua.vk.ucu.ddb.hw1.server;
+package ua.vk.ucu.ddb.hw1.server.controller;
 
 import org.springframework.web.bind.annotation.*;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.IOException;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Slf4j
 @RestController
-@RequestMapping("/counter/inmemory")
+@RequestMapping("/counter/in-memory")
 public class InMemoryCounterController {
 
     private final AtomicLong counter = new AtomicLong(0);
 
-    @PostMapping("/inc")
+    @PostMapping
     public void increment() {
-        long newValue = counter.incrementAndGet();
-        // log.info("Incrementing counter. New value: {}", newValue);
+        counter.incrementAndGet();
     }
 
-    @GetMapping("/count")
+    @GetMapping
     public long count() {
-        // log.info("Retrieving value");
         return counter.get();
+    }
+
+    @DeleteMapping
+    public void reset() throws IOException {
+        counter.set(0);
     }
 }

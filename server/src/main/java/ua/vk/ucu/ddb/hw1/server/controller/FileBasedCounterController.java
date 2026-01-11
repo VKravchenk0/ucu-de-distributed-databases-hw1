@@ -1,4 +1,4 @@
-package ua.vk.ucu.ddb.hw1.server;
+package ua.vk.ucu.ddb.hw1.server.controller;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,29 +20,36 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/counter/file-based")
 public class FileBasedCounterController {
 
-    private static final Path FILE_PATH = Paths.get("counter.txt");
+    private static final Path FILE_PATH = Paths.get(String.format("counter-%d.txt", System.currentTimeMillis()));
 
     private final ReentrantLock lock = new ReentrantLock();
 
-    @PostMapping("/inc")
+    @PostMapping
     public void increment() throws IOException {
         lock.lock();
         try {
             long value = getCounterValue();
-            long newValue = value + 1;
-            writeCounterValue(newValue);
-            // log.info("Incrementing counter. New value: {}", newValue);
+            writeCounterValue(value + 1);
         } finally {
             lock.unlock();
         }
     }
 
-    @GetMapping("/count")
+    @GetMapping
     public long count() throws IOException {
-        // log.info("Retrieving value");
         lock.lock();
         try {
             return getCounterValue();
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    @DeleteMapping
+    public void reset() throws IOException {
+        lock.lock();
+        try {
+            writeCounterValue(0);
         } finally {
             lock.unlock();
         }
