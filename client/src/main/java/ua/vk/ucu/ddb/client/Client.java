@@ -1,4 +1,4 @@
-package ua.vk.ucu.ddb.hw1.client;
+package ua.vk.ucu.ddb.client;
 
 import java.io.IOException;
 import java.net.URI;

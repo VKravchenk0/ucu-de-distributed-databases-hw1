@@ -1,4 +1,4 @@
-package ua.vk.ucu.ddb.hw1.server.controller;
+package ua.vk.ucu.ddb.server.controller.hw2;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;

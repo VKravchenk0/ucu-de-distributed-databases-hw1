@@ -1,4 +1,4 @@
-package ua.vk.ucu.ddb.hw1.server.controller;
+package ua.vk.ucu.ddb.server.controller.hw2;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -8,10 +8,10 @@ import java.sql.*;
 
 @Slf4j
 @RestController
-@RequestMapping("/counter/postgres/serializable-update-v1")
-public class PostgresSerializableUpdateControllerV1 extends BasePostgresController {
+@RequestMapping("/counter/postgres/row-level-locking")
+public class PostgresRowLevelLockingController extends BasePostgresController {
 
-    public PostgresSerializableUpdateControllerV1(DataSource dataSource) {
+    public PostgresRowLevelLockingController(DataSource dataSource) {
         super(dataSource);
     }
 
@@ -19,14 +19,26 @@ public class PostgresSerializableUpdateControllerV1 extends BasePostgresControll
     public void increment() throws SQLException {
         try (Connection conn = dataSource.getConnection()) {
             conn.setAutoCommit(false);
-            conn.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
 
-            long counter = getCurrentCounterValue(conn);
+            long counter = getCurrentCounterValueForUpdate(conn);
 
             updateCounterValue(conn, counter);
 
             conn.commit();
         }
+    }
+
+    protected long getCurrentCounterValueForUpdate(Connection conn) throws SQLException {
+        long counter;
+
+        try (PreparedStatement select = conn.prepareStatement(
+                "SELECT counter FROM user_counter WHERE user_id = 1 FOR UPDATE")) {
+
+            ResultSet rs = select.executeQuery();
+            rs.next();
+            counter = rs.getLong(1);
+        }
+        return counter;
     }
 
     private void updateCounterValue(Connection conn, long counter) throws SQLException {
@@ -38,8 +50,6 @@ public class PostgresSerializableUpdateControllerV1 extends BasePostgresControll
             update.setLong(1, counter);
             update.setLong(2, 1);
             update.executeUpdate();
-        } catch (Exception e) {
-            // не логуємо помилки
         }
     }
 

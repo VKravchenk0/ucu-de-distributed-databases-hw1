@@ -1,4 +1,4 @@
-package ua.vk.ucu.ddb.hw1.server.controller;
+package ua.vk.ucu.ddb.server.controller.hw2;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import ua.vk.ucu.ddb.hw1.server.dto.UserCounter;
+import ua.vk.ucu.ddb.server.dto.UserCounter;
 
 @Slf4j
 @RestController

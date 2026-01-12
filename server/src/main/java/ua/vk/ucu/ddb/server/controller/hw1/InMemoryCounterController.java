@@ -1,4 +1,4 @@
-package ua.vk.ucu.ddb.hw1.server.controller;
+package ua.vk.ucu.ddb.server.controller.hw1;
 
 import org.springframework.web.bind.annotation.*;
 

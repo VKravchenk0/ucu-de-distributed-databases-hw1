@@ -1,4 +1,4 @@
-package ua.vk.ucu.ddb.hw1.server.controller;
+package ua.vk.ucu.ddb.server.controller.hw2;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -8,10 +8,10 @@ import java.sql.*;
 
 @Slf4j
 @RestController
-@RequestMapping("/counter/postgres/row-level-locking")
-public class PostgresRowLevelLockingController extends BasePostgresController {
+@RequestMapping("/counter/postgres/lost-update")
+public class PostgresLostUpdateController extends BasePostgresController {
 
-    public PostgresRowLevelLockingController(DataSource dataSource) {
+    public PostgresLostUpdateController(DataSource dataSource) {
         super(dataSource);
     }
 
@@ -20,25 +20,12 @@ public class PostgresRowLevelLockingController extends BasePostgresController {
         try (Connection conn = dataSource.getConnection()) {
             conn.setAutoCommit(false);
 
-            long counter = getCurrentCounterValueForUpdate(conn);
+            long counter = getCurrentCounterValue(conn);
 
             updateCounterValue(conn, counter);
 
             conn.commit();
         }
-    }
-
-    protected long getCurrentCounterValueForUpdate(Connection conn) throws SQLException {
-        long counter;
-
-        try (PreparedStatement select = conn.prepareStatement(
-                "SELECT counter FROM user_counter WHERE user_id = 1 FOR UPDATE")) {
-
-            ResultSet rs = select.executeQuery();
-            rs.next();
-            counter = rs.getLong(1);
-        }
-        return counter;
     }
 
     private void updateCounterValue(Connection conn, long counter) throws SQLException {

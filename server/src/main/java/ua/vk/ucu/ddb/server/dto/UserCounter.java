@@ -1,4 +1,4 @@
-package ua.vk.ucu.ddb.hw1.server.dto;
+package ua.vk.ucu.ddb.server.dto;
 
 public record UserCounter(Long userId, Long counter, Integer version) {
     

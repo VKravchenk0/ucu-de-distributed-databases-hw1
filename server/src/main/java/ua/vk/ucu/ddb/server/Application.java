@@ -1,4 +1,4 @@
-package ua.vk.ucu.ddb.hw1.server;
+package ua.vk.ucu.ddb.server;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
