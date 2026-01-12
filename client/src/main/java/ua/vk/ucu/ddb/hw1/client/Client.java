@@ -28,13 +28,14 @@ public class Client {
         int parallelClients = Integer.parseInt(args[1]);
         int requestsPerClient = Integer.parseInt(args[2]);
 
+        URI counterUri = getCounterUri(counterType);
+        resetCounter(counterUri);
+
         log.info("==============================");
         log.info("Counter client execution start");
         log.info("Counter type: {}", counterType);
         log.info("Number of parallel clients: {}", parallelClients);
         log.info("Requests per client: {}", requestsPerClient);
-
-        URI counterUri = getCounterUri(counterType);
 
         StopWatch watch = StopWatch.createStarted();
         
@@ -59,7 +60,7 @@ public class Client {
             counterType, parallelClients, requestsPerClient, counterValue, elapsedSecondsStr, throughputStr
         );
 
-        resetCounter(counterUri);
+        
 
     }
     
